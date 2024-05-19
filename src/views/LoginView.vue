@@ -155,7 +155,7 @@ const doSubmit = function () {
     formError.value[x] = ""
   })
   error.value = ""
-  _axios.post("/api/login/", form.value).then((res) => {
+  _axios.post("/user/login", form.value).then((res) => {
     console.log("res", res)
     if (res.data.code !== 0) {
       ElMessage.error("用户名或密码错误")  // 偷懒直接写死，傻逼
@@ -200,19 +200,31 @@ function doRegister() {
   if (isEmpty) {
     ElMessage.error('请将信息填写完整');
   } else {
-    _axios.post("user/regist/", registerForm.value).then(function (res) {
-      console.log("注册结果", res)
-      if (res.data.code === 0) {
+    _axios.post("user/regist", registerForm.value).then(function (res) {
+      console.log("res",res)
+      
+      if(res.data.code===200) {
         ElMessage({
           message: '注册成功!',
           type: 'success',
         })
-        // window.location.reload();
-        isRegister.value = false
-      } else {
-        ElMessage.error(res.data.detail.username[0]);
-        ElMessage.error(res.data.detail.password[0]);
+      }else{
+        ElMessage.error("注册异常")
       }
+
+      // console.log("注册结果", res)
+      // if (res.data.code === 0) {
+      //
+      //   // window.location.reload();
+      //   isRegister.value = false
+      // } else {
+      //   (res.data.detail.username[0]);
+      //   ElMessage.error(res.data.detail.password[0]);
+      // }
+    }).catch(function (e) {
+      console.log("错误信息",e)
+      ElMessage.error("注册异常")
+
     })
 
 
@@ -232,7 +244,7 @@ function doRegister() {
   border-radius: 10px;
 }
 .bk{
-  background-image:url('public/bk2.jpg');
+  background-image:url('../public/bk2.jpg');
   position: fixed;
   top: 0;
   left: 0;
